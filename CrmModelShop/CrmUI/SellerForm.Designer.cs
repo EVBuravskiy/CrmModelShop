@@ -30,7 +30,7 @@
         {
             this.sqlCommand1 = new Microsoft.Data.SqlClient.SqlCommand();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.nameBox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -48,14 +48,14 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Введите имя продавца";
             // 
-            // textBox1
+            // nameBox
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.nameBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(148, 6);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(225, 23);
-            this.textBox1.TabIndex = 1;
+            this.nameBox.Location = new System.Drawing.Point(148, 6);
+            this.nameBox.Name = "nameBox";
+            this.nameBox.Size = new System.Drawing.Size(225, 23);
+            this.nameBox.TabIndex = 1;
             // 
             // button1
             // 
@@ -75,7 +75,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 461);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.nameBox);
             this.Controls.Add(this.label1);
             this.Name = "SellerForm";
             this.Text = "SellerForm";
@@ -88,7 +88,7 @@
 
         private Microsoft.Data.SqlClient.SqlCommand sqlCommand1;
         private Label label1;
-        private TextBox textBox1;
+        private TextBox nameBox;
         private Button button1;
     }
 }

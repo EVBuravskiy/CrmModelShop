@@ -26,6 +26,17 @@ namespace CrmUI
         {
             InitializeComponent();
         }
+        /// <summary>
+        /// Конструктор инициализирующий форму данными переданного в нее Товара
+        /// </summary>
+        /// <param name="product"></param>
+        public ProductForm(Product product) : this()
+        {
+            Product = product;
+            nameBox.Text = product.ProductName;
+            priceBox.Value = product.ProductPrice;
+            countBox.Value = product.ProductCount;
+        }
 
         /// <summary>
         /// Метод вызываемый при нажатии на кнопку
@@ -34,13 +45,13 @@ namespace CrmUI
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            //Создает экземпляр класса Product и присваивает его полям значения из формы
-            Product = new Product()
-            {
-                ProductName = nameBox.Text.ToString(),
-                ProductPrice = priceBox.Value,
-                ProductCount = Convert.ToInt32(countBox.Value),
-            };
+            if (Product == null) {
+                //Создает экземпляр класса Product и присваивает его полям значения из формы
+                Product = new Product();
+            }
+            Product.ProductName = nameBox.Text.ToString();
+            Product.ProductPrice = priceBox.Value;
+            Product.ProductCount = Convert.ToInt32(countBox.Value);
             //Закрывает форму
             Close();
         }

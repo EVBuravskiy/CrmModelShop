@@ -27,16 +27,27 @@ namespace CrmUI
         }
 
         /// <summary>
+        /// Конструктор для создания формы клиента с внесенными в нее данными из переданного экземпляра клиента
+        /// </summary>
+        /// <param name="customer"></param>
+        public CustomerForm(Customer customer) : this()
+        {
+            Customer = customer;
+            nameBox.Text = customer.CustomerName;
+        }
+
+        /// <summary>
         /// Метод создания клиента при нажатии на кнопку "Подтвердить"
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            Customer = new Customer()
+            if (Customer == null) 
             {
-                CustomerName = textBox1.Text.ToString()
-            };
+                Customer = new Customer(); 
+            }
+            Customer.CustomerName = nameBox.Text.ToString();
             Close();
         }
     }
