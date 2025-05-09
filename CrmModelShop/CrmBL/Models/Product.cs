@@ -6,22 +6,22 @@
     public class Product
     {
         /// <summary>
-        /// Идентификатор продукта в базе данных для Entity Framework
+        /// Идентификатор товара в базе данных для Entity Framework
         /// </summary>
         public int ProductId { get; set; } 
 
         /// <summary>
-        /// Имя продукта
+        /// Наименование товара
         /// </summary>
         public string ProductName { get; set; }
 
         /// <summary>
-        /// Цена продукта
+        /// Цена товара
         /// </summary>
         public decimal ProductPrice { get; set; }
 
         /// <summary>
-        /// Количество продукта
+        /// Количество товара
         /// </summary>
         public int ProductCount { get; set; }
 
@@ -39,7 +39,7 @@
         /// Переопределенный метод сравнения для использования словаря
         /// </summary>
         /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <returns>bool</returns>
         public override bool Equals(object? obj)
         {
             if(obj is Product product)
@@ -52,7 +52,7 @@
         /// <summary>
         /// Переопределенный метод получения хеш-кода для использования словаря
         /// </summary>
-        /// <returns></returns>
+        /// <returns>int</returns>
         public override int GetHashCode()
         {
             return ProductId;

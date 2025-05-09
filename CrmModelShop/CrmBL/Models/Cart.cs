@@ -32,12 +32,31 @@ namespace CrmBL.Models
                 Products[product] += count;
             }
             else Products.Add(product, count);
-            ///Решение преподавателя
-            //if(Products.TryGetValue(product, out int value))
-            //{
-            //    Products[product] = ++value;
-            //}
-            //else Products.Add(product, 1);
+        }
+
+        /// <summary>
+        /// Метод удаления товара из корзины
+        /// </summary>
+        /// <param name="product"></param>
+        public void RemoveFromCart(Product product) 
+        { 
+            if(Products.ContainsKey(product))
+            {
+                if (Products[product] > 1)
+                {
+                    Products[product] -= 1;
+                    return;
+                }
+                if (Products[product] == 1)
+                {
+                    Products.Remove(product);
+                    return;
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Product wasn't into cart");
+            }
         }
 
         /// <summary>
