@@ -34,5 +34,28 @@
         {
             return ProductName;
         }
+
+        /// <summary>
+        /// Переопределенный метод сравнения для использования словаря
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            if(obj is Product product)
+            {
+                return ProductId.Equals(product.ProductId);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Переопределенный метод получения хеш-кода для использования словаря
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return ProductId;
+        }
     }
 }
