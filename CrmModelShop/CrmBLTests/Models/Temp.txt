@@ -1,0 +1,188 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using CrmBL.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CrmBL.Models.Tests
+{
+    [TestClass()]
+    public class CashBoxTests
+    {
+        [TestMethod()]
+        public void CashBoxTest()
+        {
+            //Arrange
+            //Добавляем продукты в базу данных
+            Product product1 = new Product() { ProductName = "product1", ProductPrice = 100, ProductCount = 5 };
+            Product product2 = new Product() { ProductName = "product2", ProductPrice = 200, ProductCount = 5 };
+            CrmContext crmContext = new CrmContext();
+            if (!GetProductFromDb(product1))
+            {
+                crmContext.Products.Add(product1);
+            }
+            else
+            {
+                crmContext.Products.Update(product1);
+            }
+            if (!GetProductFromDb(product2))
+            {
+                crmContext.Products.Add(product2);
+            }
+            else
+            {
+                crmContext.Products.Update(product2);
+            }
+            crmContext.SaveChanges();
+
+            //Добавляем первого покупателя
+            Customer customer1 = new Customer() { CustomerName = "testUser1" };
+            if (!GetCustomerFromDb(customer1))
+            {
+                crmContext.Customers.Add(customer1);
+                crmContext.SaveChanges();
+            }
+
+            //Добавляем товары первому покупателю
+            Product customer1Product1 = new Product() { ProductName = "product1", ProductPrice = 100};
+            //Товарам первого покупателя присваиваем id и общее количество из базы данных
+            GetProductFromDb(customer1Product1);
+            Product customer1Product2 = new Product() { ProductName = "product2", ProductPrice = 200};
+            //Товарам первого покупателя присваиваем id и общее количество из базы данных
+            GetProductFromDb(customer1Product2);
+
+            //Создаем корзину первого покупателя
+            Cart cart1 = new Cart(customer1);
+
+            //Заполняем корзину товарами
+            for (int i = 0; i < 3; i++)
+            {
+                if (customer1Product1.ProductCount > 0)
+                {
+                    cart1.AddToCart(product1);
+                }
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                if (customer1Product2.ProductCount > 0)
+                {
+                    cart1.AddToCart(product2);
+                }
+            }
+
+            //Добавляем второго покупателя
+            Customer customer2 = new Customer() { CustomerName = "testUser2" };
+            if(!GetCustomerFromDb(customer2))
+            {
+                crmContext.Customers.Add(customer2);
+                crmContext.SaveChanges();
+            }
+
+            //Добавляем товары первому покупателю
+            Product customer2Product1 = new Product() { ProductName = "product1", ProductPrice = 100 };
+            //Товарам первого покупателя присваиваем id и общее количество из базы данных
+            GetProductFromDb(customer2Product1);
+            Product customer2Product2 = new Product() { ProductName = "product2", ProductPrice = 200 };
+            //Товарам первого покупателя присваиваем id и общее количество из базы данных
+            GetProductFromDb(customer2Product2);
+
+            //Создаем корзину первого покупателя
+            Cart cart2 = new Cart(customer2);
+
+            //Заполняем корзину товарами
+            for (int i = 0; i < 5; i++)
+            {
+                if (customer1Product1.ProductCount > 0)
+                {
+                    cart2.AddToCart(product1);
+                }
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                if (customer1Product2.ProductCount > 0)
+                {
+                    cart2.AddToCart(product2);
+                }
+            }
+
+            //Добавляем продавца
+            Seller seller = new Seller() { SellerName = "testSeller" };
+            if (!GetSellerFromDb(seller))
+            {
+                crmContext.Sellers.Add(seller);
+                crmContext.SaveChanges();
+            }
+            //Добавляем кассу
+            CashBox cashBox = new CashBox(1, seller);
+
+            //Ожидаемый результат
+            decimal expectedResult1 = 700;
+            decimal expectedResult2 = 800;
+            //Act
+            //В кассу добавляем корзину покупателя
+            cashBox.Enqueue(cart1);
+            //В кассу добавляем корзину покупателя
+            cashBox.Enqueue(cart2);
+            //Из кассы убираем корзину первого покупателя, возвращая результат
+            decimal result1 = cashBox.Dequeue(crmContext);
+            //Из кассы убираем корзину второго покупателя, возвращая результат
+            decimal result2 = cashBox.Dequeue(crmContext);
+
+
+            //Assert
+            Assert.AreEqual(expectedResult1, result1);
+            Assert.AreEqual(expectedResult2, result2);
+
+        }
+
+        /// <summary>
+        /// Метод получения данных для id и количества товара из базы данных
+        /// Если товар есть, то добавляем количество товара к общему количеству в базе данных
+        /// Если нет, то возвращаемся
+        /// </summary>
+        /// <param name="customerProduct"></param>
+        /// <returns>bool</returns>
+        private bool GetProductFromDb(Product customerProduct)
+        {
+            CrmContext crmContext = new CrmContext();
+            Product productFromDb = crmContext.Products.FirstOrDefault(p => p.ProductName == customerProduct.ProductName);
+            if (productFromDb != null)
+            {
+                productFromDb.ProductCount += customerProduct.ProductCount;
+                customerProduct.ProductId = productFromDb.ProductId;
+                customerProduct.ProductName = productFromDb.ProductName;
+                customerProduct.ProductPrice = productFromDb.ProductPrice;
+                customerProduct.ProductCount = productFromDb.ProductCount;
+                productFromDb = null;
+                return true;
+            }
+            return false;
+        }
+
+        private bool GetCustomerFromDb(Customer inputCustomer) 
+        {
+            CrmContext crmContext = new CrmContext();
+            Customer customerFromDb = crmContext.Customers.FirstOrDefault(c => c.CustomerName == inputCustomer.CustomerName);
+            if (customerFromDb != null)
+            {
+                inputCustomer.CustomerId = customerFromDb.CustomerId;
+                return true;
+            }
+            return false;
+        }
+
+        private bool GetSellerFromDb(Seller inputSeller)
+        {
+            CrmContext crmContext = new CrmContext();
+            Seller sellerFromDb = crmContext.Sellers.FirstOrDefault(s => s.SellerName == inputSeller.SellerName);
+            if (sellerFromDb != null)
+            {
+                inputSeller.SellerId = sellerFromDb.SellerId;
+                return true;
+            }
+            return false;
+        }
+    }
+}

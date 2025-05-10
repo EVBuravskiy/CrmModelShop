@@ -69,6 +69,5 @@ namespace CrmBL.Models.Tests
                 Assert.AreEqual(expectedResult[i].ProductName, cartResult[i].ProductName);
             }
         }
-
     }
 }

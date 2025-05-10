@@ -36,7 +36,7 @@ namespace CrmBL.Models
         /// </summary>
         public CrmContext() : base()
         {
-            //Открывает базу данных, при ее отсутствии создает ее
+            //Открывает базу данных, при ее отсутствии создает
             Database.EnsureCreated();
         }
 
@@ -46,9 +46,12 @@ namespace CrmBL.Models
         /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //TODO: Вынести варианты работы в отдельный модуль
+            //В случае работы с MSSQL
             //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb; Database=crmdb; Trusted_Connection=True;");
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=db; Database=crmdb; Integrated Security=True");
-            //optionsBuilder.UseSqlite("Data Source = sqlightdb.db");
+            //optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=db; Database=crmdb; Integrated Security=True");
+            //В случае работы с SqLite
+            optionsBuilder.UseSqlite("Data Source = sqlightdb.db");
         }
     }
 }
