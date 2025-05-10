@@ -68,7 +68,7 @@ namespace CrmBL.Models
             ExitCustomer = 0;
             CrmContext = new CrmContext();
             IsModel = true;
-            MaxQueueLenght = 5;
+            MaxQueueLenght = 1000;
         }
 
         /// <summary>
@@ -94,6 +94,10 @@ namespace CrmBL.Models
         public decimal Dequeue()
         {
             decimal sum = 0;
+            if (CartsQueue.Count == 0)
+            {
+                return sum;
+            } 
             Cart cart = CartsQueue.Dequeue();
             if(cart != null)
             {
