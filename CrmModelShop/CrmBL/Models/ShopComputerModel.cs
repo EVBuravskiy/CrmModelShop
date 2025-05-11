@@ -20,7 +20,7 @@
         /// <summary>
         /// Коллекция корзин
         /// </summary>
-        public Queue<Cart> Carts { get; set; }
+        public List<Cart> Carts { get; set; }
 
         /// <summary>
         /// Коллекция заказов
@@ -43,13 +43,18 @@
         public int CashBoxCount => Carts.Count;
 
         /// <summary>
+        /// Флаг для остановки работы метода CreateRandomCarts
+        /// </summary>
+        public bool isWorking = false;
+
+        /// <summary>
         /// Конструктор инициализирующий свойства
         /// </summary>
         public ShopComputerModel() 
         { 
             Generator = new Generator();
             CashBoxes = new List<CashBox>();
-            Carts = new Queue<Cart>();
+            Carts = new List<Cart>();
             Orders = new List<Order>();
             Sells = new List<Sell>();
             SellersQueue = new Queue<Seller>();
@@ -70,41 +75,78 @@
         /// <summary>
         /// Метод запуска компьютерной модели
         /// </summary>
-        public void Start()
+        public void Start() //public async void Start() использование async и напротив метода await 
+
         {
-            List<Customer> customers = Generator.GetNewCustomers(10);
-            Generator.GetNewProducts(30);
-            List<Cart> carts = new List<Cart>();
+            isWorking = true;
+            int sleep = 1000;
+            //запускаем метод в отдельном потоке с использованием Task, в который в лямбду-функцию передаем метод, который будет
+            //запускаться в отдельной потоке
+            Task.Run(() => CreateRandomCarts(sleep, 10, 30));   //await - будет заставлять основной поток ждать завершение метода
+                                                                //это делается когда в дальнейшей работе программы нужны данные,
+                                                                //получаемые из этого метода
 
-
-            foreach(Customer customer in customers)
+            //Преобразуем каждый cashBox в отдельный поток с использованием Select
+            var cashBoxTasks = CashBoxes.Select(cashBox => new Task(() => CashBoxWork(cashBox, 1000)));
+            //Перебирая элементы cashBoxTasks 
+            foreach(var task in cashBoxTasks)
             {
-                Cart customerCart = new Cart(customer);
-                foreach(Product product in Generator.GetRandomProducts(10, 30))
+                //запускаем каждый элемент в отдельном потоке не ожидая их выполнение
+                task.Start();
+            }
+        }
+
+        /// <summary>
+        /// Метод создающий рандомных покупателей, заполняющих их корзины рандомными товарами и ставящий
+        /// их к рандомной кассе
+        /// </summary>
+        /// <param name="sleep"></param>
+        /// <param name="customersCount"></param>
+        /// <param name="productsCount"></param>
+        private void CreateRandomCarts(int sleep, int customersCount = 10, int productsCount = 30)
+        {
+            while (isWorking)
+            {
+                List<Customer> customers = Generator.GetNewCustomers(customersCount);
+                Generator.GetNewProducts(productsCount);
+                foreach (Customer customer in customers)
                 {
-                    customerCart.AddToCart(product);
-                    carts.Add(customerCart);
+                    Cart customerCart = new Cart(customer);
+                    foreach (Product product in Generator.GetRandomProducts(customersCount, productsCount))
+                    {
+                        customerCart.AddToCart(product);
+                        Carts.Add(customerCart);
+                    }
+                    CashBox cashBox = CashBoxes[rnd.Next(CashBoxes.Count)];
+                    cashBox.Enqueue(customerCart);
                 }
+                Thread.Sleep(sleep);
             }
+        }
 
-            foreach (Cart cart in carts)
+        /// <summary>
+        /// Метод работы кассы, если очередь кассы есть, то извлекает из нее элемент
+        /// </summary>
+        /// <param name="cashBox"></param>
+        /// <param name="sleep"></param>
+        private void CashBoxWork(CashBox cashBox, int sleep)
+        {
+            while (isWorking)
             {
-                CashBox cashBox = CashBoxes[rnd.Next(CashBoxes.Count)];
-                cashBox.Enqueue(cart);
+                if (cashBox.CartsQueue.Count > 0)
+                {
+                    cashBox.Dequeue();
+                }
+                Thread.Sleep(sleep);
             }
+        }
 
-            List<decimal> allMoney = new List<decimal>();
-            while(true)
-            {
-                CashBox cashBox = CashBoxes[rnd.Next(CashBoxes.Count)];
-                var money = cashBox.Dequeue();
-                allMoney.Add(money);
-                if (money == 0) break;
-            }
-            foreach(decimal money in allMoney)
-            {
-                Console.WriteLine(money);
-            }
+        /// <summary>
+        /// Метод останавливающий работу циклов и соответствующих потоков
+        /// </summary>
+        public void Stop()
+        {
+            isWorking = false;
         }
     }
 }

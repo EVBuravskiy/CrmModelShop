@@ -17,6 +17,8 @@ namespace CrmBL.Models.Tests
             //Arrage
             ShopComputerModel shopComputerModel = new ShopComputerModel();
             shopComputerModel.Start();
+            Thread.Sleep(10000);
+            shopComputerModel.Stop();
             //Act
 
             //Assert

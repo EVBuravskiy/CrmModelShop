@@ -46,14 +46,17 @@ namespace CrmBL.Models
         /// <summary>
         /// Контекст для работы с базой данных
         /// </summary>
-        //public CrmContext crmContext;
+        public CrmContext CrmContext { get; set; }
 
         /// <summary>
         /// Флаг для компьютерного моделирования
         /// </summary>
         public bool IsModel { get; set; }
 
-        public CrmContext CrmContext { get; set; }
+        /// <summary>
+        /// Событие, возвращающее заказ
+        /// </summary>
+        public event EventHandler<Order> OrderClosedEvent;
 
         /// <summary>
         /// Конструктор инициализирующий касу
@@ -144,11 +147,17 @@ namespace CrmBL.Models
                         sum += product.ProductPrice;
                     }
                 }
+
+                order.OrderPrice = sum;
+
                 if (!IsModel) 
                 {
                     CrmContext.SaveChanges();
                     return sum;
                 }
+                //Вызываем событие, куда передаем класс кассы - источник события, сформированный
+                //заказ
+                OrderClosedEvent?.Invoke(this, order); //Обязательно используем ? т.к. событие может вернуться равным null
             }
             return sum;
         }

@@ -40,6 +40,11 @@
         /// </summary>
         public virtual ICollection<Sell> Sells { get; set; }
 
+        /// <summary>
+        /// Цена заказа (общая стоимость)
+        /// </summary>
+        public decimal OrderPrice { get; set; }
+
         public override string ToString()
         {
             return $"#{OrderId} from {CreateOrderDateTime.ToString("dd.MM.yy hh:mm:ss")}";
