@@ -63,6 +63,7 @@ namespace CrmBL.Models
         /// </summary>
         /// <param name="cashBoxId"></param>
         /// <param name="seller"></param>
+        
         public CashBox(int cashBoxId, Seller seller) 
         { 
             CashBoxId = cashBoxId;
@@ -71,8 +72,10 @@ namespace CrmBL.Models
             ExitCustomer = 0;
             CrmContext = new CrmContext();
             IsModel = true;
-            MaxQueueLenght = 1000;
+            MaxQueueLenght = 10;
         }
+
+
 
         /// <summary>
         /// Метод добавления корзины в очередь
@@ -161,5 +164,11 @@ namespace CrmBL.Models
             }
             return sum;
         }
+
+        public override string ToString()
+        {
+            return $"Касса #{CashBoxId}";
+        }
+
     }
 }

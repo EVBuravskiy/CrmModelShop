@@ -102,3 +102,4 @@ F:\Programming\С#\CodeBlog Полный курс C#\Lessons\CrmModelShop\CrmUI\
 F:\Programming\С#\CodeBlog Полный курс C#\Lessons\CrmModelShop\CrmUI\obj\Debug\net6.0-windows\CrmUI.CustomerForm.resources
 F:\Programming\С#\CodeBlog Полный курс C#\Lessons\CrmModelShop\CrmUI\obj\Debug\net6.0-windows\CrmUI.SellerForm.resources
 F:\Programming\С#\CodeBlog Полный курс C#\Lessons\CrmModelShop\CrmUI\obj\Debug\net6.0-windows\CrmUI.ProductForm.resources
+F:\Programming\С#\CodeBlog Полный курс C#\Lessons\CrmModelShop\CrmUI\obj\Debug\net6.0-windows\CrmUI.ModelForm.resources

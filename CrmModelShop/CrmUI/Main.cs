@@ -117,5 +117,15 @@ namespace CrmUI
             }
         }
 
+        /// <summary>
+        /// Метод отображающий форму компьютерного моделирования
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void modelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ModelForm modelForm = new ModelForm();
+            modelForm.Show();
+        }
     }
 }
