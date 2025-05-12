@@ -32,7 +32,7 @@ namespace CrmUI
         /// <param name="seller"></param>
         public SellerForm(Seller seller) : this()
         {
-            Seller = seller;
+            Seller = seller ?? new Seller();
             nameBox.Text = Seller.SellerName;
         }
 
@@ -43,9 +43,7 @@ namespace CrmUI
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            if (Seller == null) {
-                Seller = new Seller();
-            }
+            Seller = Seller ?? new Seller();
             Seller.SellerName = nameBox.Text.ToString();
             Close();
         }

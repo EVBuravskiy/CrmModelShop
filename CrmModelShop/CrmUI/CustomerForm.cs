@@ -32,8 +32,8 @@ namespace CrmUI
         /// <param name="customer"></param>
         public CustomerForm(Customer customer) : this()
         {
-            Customer = customer;
-            nameBox.Text = customer.CustomerName;
+            Customer = customer ?? new Customer();
+            nameBox.Text = Customer.CustomerName;
         }
 
         /// <summary>
@@ -43,10 +43,7 @@ namespace CrmUI
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            if (Customer == null) 
-            {
-                Customer = new Customer(); 
-            }
+            Customer = Customer ?? new Customer();
             Customer.CustomerName = nameBox.Text.ToString();
             Close();
         }
