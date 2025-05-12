@@ -79,7 +79,7 @@
             Orders = new List<Order>();
             Sells = new List<Sell>();
             SellersQueue = new Queue<Seller>();
-            CashBoxCount = 5;
+            CashBoxCount = 0;
             CustomersProductCount = 30;
             CustomersCount = 10;
             CustomersSpeed = 100;
@@ -112,12 +112,12 @@
             }
             //запускаем метод в отдельном потоке с использованием Task, в который в лямбду-функцию передаем метод, который будет
             //запускаться в отдельной потоке
-            Task.Run(() => CreateRandomCarts(CustomersSpeed, CustomersCount, CustomersProductCount));   //await - будет заставлять основной поток ждать завершение метода
+            Task.Run(() => CreateRandomCarts());   //await - будет заставлять основной поток ждать завершение метода
                                                                 //это делается когда в дальнейшей работе программы нужны данные,
                                                                 //получаемые из этого метода
 
             //Преобразуем каждый cashBox в отдельный поток с использованием Select
-            var cashBoxTasks = CashBoxes.Select(cashBox => new Task(() => CashBoxWork(cashBox, CashBoxSpeed)));
+            var cashBoxTasks = CashBoxes.Select(cashBox => new Task(() => CashBoxWork(cashBox)));
             //Перебирая элементы cashBoxTasks 
             foreach(var task in cashBoxTasks)
             {
@@ -130,19 +130,16 @@
         /// Метод создающий рандомных покупателей, заполняющих их корзины рандомными товарами и ставящий
         /// их к рандомной кассе
         /// </summary>
-        /// <param name="customersSpeed"></param>
-        /// <param name="customersCount"></param>
-        /// <param name="productsCount"></param>
-        private void CreateRandomCarts(int customersSpeed, int customersCount = 10, int productsCount = 30)
+        private void CreateRandomCarts()
         {
             while (isWorking)
             {
-                List<Customer> customers = Generator.GetNewCustomers(customersCount);
-                Generator.GetNewProducts(productsCount);
+                List<Customer> customers = Generator.GetNewCustomers(CustomersCount);
+                Generator.GetNewProducts(CustomersProductCount);
                 foreach (Customer customer in customers)
                 {
                     Cart customerCart = new Cart(customer);
-                    foreach (Product product in Generator.GetRandomProducts(customersCount, productsCount))
+                    foreach (Product product in Generator.GetRandomProducts(CustomersCount, CustomersProductCount))
                     {
                         customerCart.AddToCart(product);
                         Carts.Add(customerCart);
@@ -151,7 +148,7 @@
                     CashBox cashBox = GetMinQueueInCashBox();
                     cashBox.Enqueue(customerCart);
                 }
-                Thread.Sleep(customersSpeed);
+                Thread.Sleep(CustomersSpeed);
             }
         }
 
@@ -159,8 +156,7 @@
         /// Метод работы кассы, если очередь кассы есть, то извлекает из нее элемент
         /// </summary>
         /// <param name="cashBox"></param>
-        /// <param name="cashBoxSpeed"></param>
-        private void CashBoxWork(CashBox cashBox, int cashBoxSpeed)
+        private void CashBoxWork(CashBox cashBox)
         {
             while (isWorking)
             {
@@ -168,7 +164,7 @@
                 {
                     cashBox.Dequeue();
                 }
-                Thread.Sleep(cashBoxSpeed);
+                Thread.Sleep(CashBoxSpeed);
             }
         }
 

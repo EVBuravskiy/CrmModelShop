@@ -14,6 +14,8 @@ namespace CrmBL.Models
         /// </summary>
         public Dictionary<Product, int> Products { get; set; }
 
+        public decimal TotalCost => GetAllFromCart().Sum(p => p.ProductPrice);
+
         public Cart(Customer customer)
         {
             if (customer == null) throw new NullReferenceException($"Customer is null {nameof(customer)}");
@@ -31,7 +33,10 @@ namespace CrmBL.Models
             {
                 Products[product] += count;
             }
-            else Products.Add(product, count);
+            else
+            {
+                Products.Add(product, count);
+            }
         }
 
         /// <summary>

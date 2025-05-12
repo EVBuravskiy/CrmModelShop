@@ -83,7 +83,7 @@ namespace CrmBL.Models
         /// <param name="cart"></param>
         public void Enqueue(Cart cart)
         {
-            if(CartsQueue.Count <= MaxQueueLenght)
+            if(CartsQueue.Count < MaxQueueLenght)
             {
                 CartsQueue.Enqueue(cart);
             }
@@ -169,6 +169,5 @@ namespace CrmBL.Models
         {
             return $"Касса #{CashBoxId}";
         }
-
     }
 }

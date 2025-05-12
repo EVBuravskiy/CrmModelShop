@@ -19,6 +19,17 @@ namespace CrmUI
         CrmContext crmContext;
 
         /// <summary>
+        /// Клиент
+        /// </summary>
+        Customer Customer { get; set; }
+
+        /// <summary>
+        /// Корзина клиента
+        /// </summary>
+        Cart CustomerCart { get; set; }
+
+
+        /// <summary>
         /// Конструктор для основной формы
         /// </summary>
         public Main()
@@ -26,6 +37,11 @@ namespace CrmUI
             InitializeComponent();
             //инициализация переменной контекста
             crmContext = new CrmContext();
+
+            Customer = new Customer();
+
+            CustomerCart = new Cart(Customer);
+
         }
 
         /// <summary>
@@ -126,6 +142,51 @@ namespace CrmUI
         {
             ModelForm modelForm = new ModelForm();
             modelForm.Show();
+        }
+
+        /// <summary>
+        /// Метод срабатывающий на загрузке формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Main_Load(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                listBoxProducts.Invoke((Action)delegate
+                {
+                    listBoxProducts.Items.AddRange(crmContext.Products.ToArray());
+                });
+                listBoxCart.Invoke((Action)delegate
+                {
+                    UpdateLists();
+                });
+            });
+        }
+
+        /// <summary>
+        /// Метод добавления из списка listBoxProducts товара в listBoxCart
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void listBoxProducts_DoubleClick(object sender, EventArgs e)
+        {
+            if(listBoxProducts.SelectedItem is Product product)
+            {
+                CustomerCart.AddToCart(product);
+                listBoxCart.Items.Add(product);
+                UpdateLists();
+            }
+        }
+
+        /// <summary>
+        /// Метод обновления списков при добавлении товара и общей цены товаров
+        /// </summary>
+        private void UpdateLists()
+        {
+            listBoxCart.Items.Clear();
+            listBoxCart.Items.AddRange(CustomerCart.GetAllFromCart().ToArray());
+            label1.Text = $"Итого: {CustomerCart.TotalCost} рублей";
         }
     }
 }
