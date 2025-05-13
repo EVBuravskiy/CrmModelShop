@@ -3,73 +3,73 @@
     public class ShopComputerModel
     {
         /// <summary>
-        /// Рандомайзер
+        /// Random
         /// </summary>
         Random rnd = new Random();
 
         /// <summary>
-        /// Генератор
+        /// Generator
         /// </summary>
         public Generator Generator { get; set; }
 
         /// <summary>
-        /// Коллекция касс
+        /// Collection of cashboxes
         /// </summary>
         public List<CashBox> CashBoxes { get; set; }
 
         /// <summary>
-        /// Коллекция корзин
+        /// Collection of carts
         /// </summary>
         public List<Cart> Carts { get; set; }
 
         /// <summary>
-        /// Коллекция заказов
+        /// Collection of orders
         /// </summary>
         public List<Order> Orders { get; set; }
 
         /// <summary>
-        /// Коллекция продаж
+        /// Collection of sells
         /// </summary>
         public List<Sell> Sells { get; set; }
 
         /// <summary>
-        /// Коллекция - очередь продавцов
+        /// Collection - sellers queue
         /// </summary>
         public Queue<Seller> SellersQueue { get; set; }
 
         /// <summary>
-        /// Количество касс
+        /// Counter of cashboxes
         /// </summary>
         public int CashBoxCount { get; set; }
 
         /// <summary>
-        /// Флаг для остановки работы метода CreateRandomCarts
+        /// Stop sign for creating customer carts
         /// </summary>
         public bool isWorking = false;
 
         /// <summary>
-        /// Количество продуктов покупателя
+        /// Count of customer's products
         /// </summary>
         public int CustomersProductCount { get; set; }
 
 
         /// <summary>
-        /// Количество покупателей
+        /// Count of customers
         /// </summary>
         public int CustomersCount { get; set; }
 
         /// <summary>
-        /// Таймаут формирования покупателей и их корзин
+        /// Speed ​​of customer service
         /// </summary>
         public int CustomersSpeed { get; set; }
 
         /// <summary>
-        /// Таймаут работы кассы
+        /// Cashbox speed
         /// </summary>
         public int CashBoxSpeed { get; set; }
 
         /// <summary>
-        /// Конструктор инициализирующий свойства
+        /// Computer model constructor
         /// </summary>
         public ShopComputerModel() 
         { 
@@ -100,9 +100,9 @@
         }
 
         /// <summary>
-        /// Метод запуска компьютерной модели
+        /// Start computer model
         /// </summary>
-        public void Start() //public async void Start() использование async и напротив метода await 
+        public void Start() 
         {
             isWorking = true;
             for (int i = 0; i < CashBoxCount; i++)
@@ -110,25 +110,16 @@
                 CashBox newCashBox = new CashBox(i + 1, SellersQueue.Dequeue());
                 CashBoxes.Add(newCashBox);
             }
-            //запускаем метод в отдельном потоке с использованием Task, в который в лямбду-функцию передаем метод, который будет
-            //запускаться в отдельной потоке
-            Task.Run(() => CreateRandomCarts());   //await - будет заставлять основной поток ждать завершение метода
-                                                                //это делается когда в дальнейшей работе программы нужны данные,
-                                                                //получаемые из этого метода
-
-            //Преобразуем каждый cashBox в отдельный поток с использованием Select
+            Task.Run(() => CreateRandomCarts());   
             var cashBoxTasks = CashBoxes.Select(cashBox => new Task(() => CashBoxWork(cashBox)));
-            //Перебирая элементы cashBoxTasks 
             foreach(var task in cashBoxTasks)
             {
-                //запускаем каждый элемент в отдельном потоке не ожидая их выполнение
                 task.Start();
             }
         }
 
         /// <summary>
-        /// Метод создающий рандомных покупателей, заполняющих их корзины рандомными товарами и ставящий
-        /// их к рандомной кассе
+        /// Create random customers, add random products to customer's cart, add into cashboxes queue
         /// </summary>
         private void CreateRandomCarts()
         {
@@ -144,7 +135,6 @@
                         customerCart.AddToCart(product);
                         Carts.Add(customerCart);
                     }
-                    //CashBox cashBox = CashBoxes[rnd.Next(CashBoxCount)];
                     CashBox cashBox = GetMinQueueInCashBox();
                     cashBox.Enqueue(customerCart);
                 }
@@ -153,7 +143,7 @@
         }
 
         /// <summary>
-        /// Метод работы кассы, если очередь кассы есть, то извлекает из нее элемент
+        /// Cashbox working
         /// </summary>
         /// <param name="cashBox"></param>
         private void CashBoxWork(CashBox cashBox)

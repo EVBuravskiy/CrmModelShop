@@ -14,12 +14,12 @@ namespace CrmUI
     public partial class Authorization : Form
     {
         /// <summary>
-        /// Свойство создания экземпляра клиента
+        /// Customer
         /// </summary>
         public Customer Customer { get; set; }
-        
+
         /// <summary>
-        /// Конструктор
+        /// Authorization constructor
         /// </summary>
         public Authorization()
         {
@@ -27,7 +27,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод при нажатии на кнопку Войти
+        /// Login by pressing the button
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

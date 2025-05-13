@@ -1,47 +1,47 @@
 ﻿namespace CrmBL.Models
 {
     /// <summary>
-    /// Заказ
+    /// Entity Order
     /// </summary>
     public class Order
     {
         /// <summary>
-        /// Идентификатор заказа
+        /// Order ID
         /// </summary>
         public int OrderId { get; set; }
 
         /// <summary>
-        /// Идентификатор клиента для связи с таблицей покупателей
+        /// Customer ID for Entity
         /// </summary>
         public int CustomerId { get; set; }
 
         /// <summary>
-        /// Свойство связывающее с таблицей покупателя
+        /// Property Customer for Entity
         /// </summary>
         public virtual Customer Customer { get; set; }
 
         /// <summary>
-        /// Идентификатор продавца для связи с таблицей продавцов
+        /// Seller ID for Entity
         /// </summary>
         public int SellerId { get; set; }
 
         /// <summary>
-        /// Свойство связывающее с таблицей продавца
+        /// Property Seller for Entity
         /// </summary>
         public virtual Seller Seller { get; set; }
 
         /// <summary>
-        /// Дата и время заказа
+        /// Date and time of order formation
         /// </summary>
         public DateTime CreateOrderDateTime { get; set; }
 
         /// <summary>
-        /// Свойство - коллекция связывающая с таблицей продажи
+        /// Collection of Sells
         /// </summary>
         public virtual ICollection<Sell> Sells { get; set; }
 
         /// <summary>
-        /// Цена заказа (общая стоимость)
+        /// Total price of order
         /// </summary>
         public decimal OrderPrice { get; set; }
 

@@ -3,33 +3,41 @@ using System.Windows.Forms;
 
 namespace CrmUI
 {
+    /// <summary>
+    /// Computer model form
+    /// </summary>
     public partial class ModelForm : Form
     {
-        //Подключаем и инициализируем компьютерную модель
+        /// <summary>
+        /// Create computer model
+        /// </summary>
         ShopComputerModel computerModel = new ShopComputerModel();
+
+        /// <summary>
+        /// Computer model form constructor
+        /// </summary>
         public ModelForm()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Running the Simulation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            //Создаем список элементов CashBoxView
             List<CashBoxView> cashBoxViews = new List<CashBoxView>();
 
-            //Запускаем компьютерную модель
             computerModel.Start();
             button1.Enabled = false;
             CashBoxCount.Enabled = false;
 
-            //Исходя из количества касс в компьютерной модели 
             for (int i = 0; i < computerModel.CashBoxCount; i++)
             {
-                //Создаем экземпляр класса CashBoxView и задаем ему начальные свойства
                 CashBoxView newCashBoxView = new CashBoxView(computerModel.CashBoxes[i], i, 10, 26 * i);
-                //Заполняем список элементов CashBoxView
                 cashBoxViews.Add(newCashBoxView);
-                //Добавляем элементы на форму
                 Controls.Add(newCashBoxView.CashBoxName);
                 Controls.Add(newCashBoxView.Price);
                 Controls.Add(newCashBoxView.QueueLenght);
@@ -39,7 +47,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Приватный метод корректно останавливающий модель при закрытии формы
+        /// Stop the Simulation
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -49,7 +57,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод возвращающий текущие параметры модели в форму
+        /// Load computer model form 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -61,9 +69,9 @@ namespace CrmUI
             computerModel.CustomersSpeed = Convert.ToInt32(CustomerSpeed.Value);
             computerModel.CashBoxSpeed = Convert.ToInt32(CashBoxSpeed.Value);
         }
-        
+
         /// <summary>
-        /// Методы инициализирующие поля модели данными из формы
+        /// Initialization of computer model data
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

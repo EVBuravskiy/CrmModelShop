@@ -1,32 +1,32 @@
 ﻿namespace CrmBL.Models
 {
     /// <summary>
-    /// Товар
+    /// Entity Product
     /// </summary>
     public class Product
     {
         /// <summary>
-        /// Идентификатор товара в базе данных для Entity Framework
+        /// Product ID
         /// </summary>
         public int ProductId { get; set; } 
 
         /// <summary>
-        /// Наименование товара
+        /// Product name
         /// </summary>
         public string ProductName { get; set; }
 
         /// <summary>
-        /// Цена товара
+        /// Product price
         /// </summary>
         public decimal ProductPrice { get; set; }
 
         /// <summary>
-        /// Количество товара
+        /// Product count
         /// </summary>
         public int ProductCount { get; set; }
 
         /// <summary>
-        /// Свойство - коллекция связывающая с таблицей продажи
+        /// Collection of sells
         /// </summary>
         public virtual ICollection<Sell> Sells { get; set; }
 
@@ -36,7 +36,7 @@
         }
 
         /// <summary>
-        /// Переопределенный метод сравнения для использования словаря
+        /// Overridden compare method to use dictionary
         /// </summary>
         /// <param name="obj"></param>
         /// <returns>bool</returns>
@@ -50,7 +50,7 @@
         }
 
         /// <summary>
-        /// Переопределенный метод получения хеш-кода для использования словаря
+        /// Overridden method to get hashcode to use dictionary
         /// </summary>
         /// <returns>int</returns>
         public override int GetHashCode()

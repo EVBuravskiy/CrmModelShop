@@ -10,32 +10,32 @@ namespace CrmUI
     public class CashBoxView
     {
         /// <summary>
-        /// Свойство кассы
+        /// Property Cashbox
         /// </summary>
         public CashBox CashBox { get; set; }
 
         /// <summary>
-        /// Свойство CashBoxName для формы
+        /// Label CashBoxName for form
         /// </summary>
         public Label CashBoxName { get; set; }
 
         /// <summary>
-        /// Свойство Price для формы
+        /// Property Price
         /// </summary>
         public NumericUpDown Price { get; set; }
 
         /// <summary>
-        /// Свойство QueueLenght для формы
+        /// Queue length property for progressbar
         /// </summary>
         public ProgressBar QueueLenght { get; set; }
 
         /// <summary>
-        /// Свойство LeaveCustomersCount для формы
+        /// Property number of customers who was left
         /// </summary>
         public Label LeaveCustomersCount { get; set; }
 
         /// <summary>
-        /// Создаем конструктор, в который передаем саму кассу, выручку, и расположение элемента по оси x и y
+        /// Cashbox view constructor
         /// </summary>
         /// <param name="cashBox"></param>
         /// <param name="number"></param>
@@ -44,30 +44,26 @@ namespace CrmUI
         public CashBoxView(CashBox cashBox, int number, int x, int y) 
         {
             CashBox = cashBox;
-
-            //Создаем CashBoxName и заполняем его свойствами
             CashBoxName = new Label();
             CashBoxName.AutoSize = true;
-            CashBoxName.Location = new System.Drawing.Point(x, y);    //расположение элемента на форме
-            CashBoxName.Name = "CashBoxName" + number;                //имя элемента на форме
-            CashBoxName.Size = new System.Drawing.Size(40, 23);       //размеры элемента на форме
-            CashBoxName.TabIndex = 1;                                 //индекс отступа
-            CashBoxName.Text = CashBox.ToString();                    //отображаемый текст элемента
+            CashBoxName.Location = new System.Drawing.Point(x, y);    
+            CashBoxName.Name = "CashBoxName" + number;                
+            CashBoxName.Size = new System.Drawing.Size(40, 23);       
+            CashBoxName.TabIndex = 1;                                 
+            CashBoxName.Text = CashBox.ToString();                    
 
-            //Создаем Price и заполняем его свойствами
             Price = new NumericUpDown();
             Price.DecimalPlaces = 2;
-            Price.Location = new System.Drawing.Point(x + 70, y);    //расположение элемента на форме
+            Price.Location = new System.Drawing.Point(x + 70, y);    
             Price.Maximum = new decimal(new int[] {
                     1000000000,
                     0,
                     0,
                     0});
-            Price.Name = "Price" + number;                          //имя элемента на форме
-            Price.Size = new System.Drawing.Size(100, 23);          //размеры элемента на форме
+            Price.Name = "Price" + number;                          
+            Price.Size = new System.Drawing.Size(100, 23);          
             Price.TabIndex = 1;
 
-            //Создаем QueueLenght
             QueueLenght = new ProgressBar();
             QueueLenght.Enabled = false;
             QueueLenght.Location = new System.Drawing.Point(x + 170, y);
@@ -77,7 +73,6 @@ namespace CrmUI
             QueueLenght.TabIndex = 1;
             QueueLenght.Value = 0;
 
-            //Создаем LeaveCustomersCount и заполняем его свойствами
             LeaveCustomersCount = new Label();
             LeaveCustomersCount.AutoSize = true;
             LeaveCustomersCount.Location = new System.Drawing.Point(x+400, y);//расположение элемента на форме
@@ -87,12 +82,12 @@ namespace CrmUI
             LeaveCustomersCount.Text = "";                                    //отображаемый текст элемента
 
 
-            //Подписываемся на событие в CashBox
+            //Event from CashBox
             CashBox.OrderClosedEvent += OrderBox_OrderClosed;
         }
 
         /// <summary>
-        /// Приватный метод реализующий появление события
+        /// Change of form when an event occurs
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="order"></param>

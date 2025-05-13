@@ -14,12 +14,12 @@ namespace CrmUI
     public partial class CustomerForm : Form
     {
         /// <summary>
-        /// Свойство создания клиента
+        /// Property Customer
         /// </summary>
         public Customer Customer { get; set; }
 
         /// <summary>
-        /// Конструктор для создания формы клиента
+        /// Customer's form constructor
         /// </summary>
         public CustomerForm()
         {
@@ -27,7 +27,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Конструктор для создания формы клиента с внесенными в нее данными из переданного экземпляра клиента
+        /// Customer's form constructor
         /// </summary>
         /// <param name="customer"></param>
         public CustomerForm(Customer customer) : this()
@@ -37,7 +37,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод создания клиента при нажатии на кнопку "Подтвердить"
+        /// Add new customer from form
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

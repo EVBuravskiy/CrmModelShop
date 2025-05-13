@@ -8,62 +8,62 @@ using System.Threading.Tasks;
 namespace CrmBL.Models
 {
     /// <summary>
-    /// Класс кассового аппарата выполняющий функции контроллера
+    /// Cashbox class implementing the controller 
     /// </summary>
     public class CashBox
     {
         /// <summary>
-        /// Номер кассы
+        /// Сashbox ID
         /// </summary>
         public int CashBoxId { get; set; }
 
         /// <summary>
-        /// Свойство - продавец
+        /// Property seller
         /// </summary>
         public Seller Seller { get; set; }
 
         /// <summary>
-        /// Свойство - очередь из корзин покупателей
+        /// Property queue of customer baskets
         /// </summary>
         public Queue<Cart> CartsQueue { get; set; }
 
         /// <summary>
-        /// Максимальная длина очереди
+        /// Maximum queue length for computer simulation
         /// </summary>
         public int MaxQueueLenght { get; set; }
 
         /// <summary>
-        /// Текущая длина очереди
+        /// Current queue length for computer simulation
         /// </summary>
         public int CurrentQueueLength => CartsQueue.Count;
 
 
         /// <summary>
-        /// Счетчик покупателей ушедших без покупки в случае большой очереди для компьютерного моделирования
+        /// Abandoned customer counter for computer simulation
         /// </summary>
         public int ExitCustomer { get; set; }
 
         /// <summary>
-        /// Контекст для работы с базой данных
+        /// Database context
         /// </summary>
         public CrmContext CrmContext { get; set; }
 
         /// <summary>
-        /// Флаг для компьютерного моделирования
+        /// Pointer for computer simulation
         /// </summary>
         public bool IsModel { get; set; }
 
         /// <summary>
-        /// Событие, возвращающее заказ
+        /// Event returning an order
         /// </summary>
         public event EventHandler<Order> OrderClosedEvent;
 
         /// <summary>
-        /// Конструктор инициализирующий касу
+        /// Cashbox constructor
         /// </summary>
         /// <param name="cashBoxId"></param>
         /// <param name="seller"></param>
-        
+        /// <param name="crmContext"></param>
         public CashBox(int cashBoxId, Seller seller, CrmContext crmContext = null) 
         { 
             CashBoxId = cashBoxId;
@@ -78,7 +78,7 @@ namespace CrmBL.Models
 
 
         /// <summary>
-        /// Метод добавления корзины в очередь
+        /// Adding a customer's cart to the queue
         /// </summary>
         /// <param name="cart"></param>
         public void Enqueue(Cart cart)
@@ -94,9 +94,9 @@ namespace CrmBL.Models
         }
 
         /// <summary>
-        /// Метод удаления корзины из очереди
+        /// Removing a customer's cart from the queue
         /// </summary>
-        /// <returns>decimal - сумма покупки</returns>
+        /// <returns>decimal - Purchase amount</returns>
         public decimal Dequeue()
         {
             decimal sum = 0;
@@ -157,9 +157,7 @@ namespace CrmBL.Models
                     CrmContext.SaveChanges();
                     return sum;
                 }
-                //Вызываем событие, куда передаем класс кассы - источник события, сформированный
-                //заказ
-                OrderClosedEvent?.Invoke(this, order); //Обязательно используем ? т.к. событие может вернуться равным null
+                OrderClosedEvent?.Invoke(this, order);
             }
             return sum;
         }

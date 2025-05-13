@@ -11,15 +11,18 @@ using System.Windows.Forms;
 
 namespace CrmUI
 {
+    /// <summary>
+    /// Seller form
+    /// </summary>
     public partial class SellerForm : Form
     {
         /// <summary>
-        /// Свойство для экземпляра класса Продавца
+        /// Property Seller
         /// </summary>
         public Seller Seller { get; set; }
 
         /// <summary>
-        /// Конструктор формы 
+        /// Seller form constructor
         /// </summary>
         public SellerForm()
         {
@@ -27,7 +30,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Конструктор формы, поля которого инициализированы переданным в него экземпляром класса Продавца
+        /// Initializing form data constructor
         /// </summary>
         /// <param name="seller"></param>
         public SellerForm(Seller seller) : this()
@@ -37,7 +40,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод выполняющийся при нажатии на кнопку Подтвердить
+        /// Add seller from form to database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

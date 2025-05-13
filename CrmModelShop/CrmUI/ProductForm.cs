@@ -12,15 +12,18 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CrmUI
 {
+    /// <summary>
+    /// Product form
+    /// </summary>
     public partial class ProductForm : Form
     {
         /// <summary>
-        /// Свойство - класс Product
+        /// Property Product
         /// </summary>
         public Product Product { get; set; }
 
         /// <summary>
-        /// Конструктор инициализирующий форму
+        /// Product form constructor
         /// </summary>
         public ProductForm()
         {
@@ -28,7 +31,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Конструктор инициализирующий форму данными переданного в нее Товара
+        /// Initializing form data constructor
         /// </summary>
         /// <param name="product"></param>
         public ProductForm(Product product) : this()
@@ -40,7 +43,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод вызываемый при нажатии на кнопку
+        /// Add product from form to database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

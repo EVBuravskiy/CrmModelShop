@@ -14,48 +14,46 @@ namespace CrmUI
     public partial class Main : Form
     {
         /// <summary>
-        /// Переменная контекста
+        /// Database context
         /// </summary>
         CrmContext crmContext;
 
         /// <summary>
-        /// Клиент
+        /// Property Customer
         /// </summary>
         Customer Customer { get; set; }
 
         /// <summary>
-        /// Корзина клиента
+        /// Property Customer's cart
         /// </summary>
         Cart CustomerCart { get; set; }
 
         /// <summary>
-        /// Касса
+        /// Property Cashbox
         /// </summary>
         CashBox CashBox { get; set; }
 
         /// <summary>
-        /// Продавец
+        /// Property Seller
         /// </summary>
         Seller Seller { get; set; }
 
         /// <summary>
-        /// Свойство для инициализации списка продуктов из базы данных
+        /// Property collection of products
         /// </summary>
         List<Product> ListOfProducts { get; set; }
 
         /// <summary>
-        /// Конструктор для основной формы
+        /// Main Form constructor
         /// </summary>
         public Main()
         {
             InitializeComponent();
-            //инициализация переменной контекста
             crmContext = new CrmContext();
-            //ListOfProducts = crmContext.Products.ToList();
         }
 
         /// <summary>
-        /// Метод отображения товаров из базы данных при нажатии на товары
+        /// Displaying products from the database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -67,7 +65,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод отображения клиентов из базы данных при нажатии на клиентов
+        /// Displaying clients from the database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -78,7 +76,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод отображения продавцов из базы данных при нажатии на продавцов
+        /// Displaying sellers from the database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -89,7 +87,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод отображения заказов из базы данных при нажатии на заказы
+        /// Displaying orders from the database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -100,7 +98,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод добавления товара в базу данных из формы товара
+        /// Add product to the database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -116,7 +114,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод сохранения клиента в базу данных из формы клиента
+        /// Adding a customer to the database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -131,7 +129,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод добавления продавца в базу данных из формы продавца
+        /// Adding a seller to the database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -146,7 +144,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод отображающий форму компьютерного моделирования
+        /// Display computer model form
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -157,7 +155,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод срабатывающий на загрузке формы
+        /// Load Main form
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -177,7 +175,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод добавления из списка listBoxProducts товара в listBoxCart
+        /// Add products from listBoxProducts to listBoxCart
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -199,7 +197,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод обновления списков при добавлении товара и общей цены товаров
+        /// Update lists of products
         /// </summary>
         private void UpdateLists()
         {
@@ -214,7 +212,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод при нажатии на кнопку Авторизация
+        /// Start of authorization
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -242,7 +240,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод при нажатии на кнопку Оплатить
+        /// Start of payment
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -278,7 +276,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Приватный метод реализующий появление события
+        /// Update list of products when get event from catalog
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="order"></param>

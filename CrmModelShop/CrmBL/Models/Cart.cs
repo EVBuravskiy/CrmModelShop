@@ -2,20 +2,31 @@
 
 namespace CrmBL.Models
 {
+    /// <summary>
+    /// Cart Entity
+    /// </summary>
     public class Cart : IEnumerable
     {
         /// <summary>
-        /// Свойство - для экземпляра класса Покупателя которому относится корзина
+        /// Customer property
         /// </summary>
         public Customer Customer { get; set; }
 
         /// <summary>
-        /// Свойство - коллекция Товаров в виде словаря, где key - сам продукт, а value - их количество
+        /// Property collection(dictionary) of products
         /// </summary>
         public Dictionary<Product, int> Products { get; set; }
 
+        /// <summary>
+        /// Total Cost of products in cart
+        /// </summary>
         public decimal TotalCost => GetAllFromCart().Sum(p => p.ProductPrice);
 
+        /// <summary>
+        /// Cart constructor
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <exception cref="NullReferenceException"></exception>
         public Cart(Customer customer)
         {
             if (customer == null) throw new NullReferenceException($"Customer is null {nameof(customer)}");
@@ -24,7 +35,7 @@ namespace CrmBL.Models
         }
 
         /// <summary>
-        /// Метод добавления товара в корзину
+        /// Add to cart
         /// </summary>
         /// <param name="product"></param>
         public void AddToCart(Product product, int count = 1)
@@ -40,7 +51,7 @@ namespace CrmBL.Models
         }
 
         /// <summary>
-        /// Метод удаления товара из корзины
+        /// Remove from cart
         /// </summary>
         /// <param name="product"></param>
         public void RemoveFromCart(Product product) 
@@ -65,9 +76,9 @@ namespace CrmBL.Models
         }
 
         /// <summary>
-        /// Метод получения всех товаров из корзины
+        /// Get all products from cart
         /// </summary>
-        /// <returns>Список товаров</returns>
+        /// <returns>List of products</returns>
         public List<Product> GetAllFromCart()
         {
             List<Product> list = new List<Product>();

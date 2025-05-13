@@ -13,43 +13,40 @@ using System.Windows.Forms;
 namespace CrmUI
 {
     /// <summary>
-    /// Класс каталога использующий изменяемый тип данных для отображения таблицы данных из базы данных
+    /// Catalog for displaying products, customers and sellers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public partial class Catalog<T> : Form
         where T : class
     {
         /// <summary>
-        /// Переменная контекста для работы с базой данных
+        /// Database context 
         /// </summary>
         CrmContext CrmContext { get; set; }
 
         /// <summary>
-        /// Переменная таблицы базы данной для нахождения элемента
+        /// Database Entity
         /// </summary>
         DbSet<T> dbSet;
 
         /// <summary>
-        /// Событие, возвращающее заказ
+        /// Event on catalog change
         /// </summary>
         public event EventHandler<bool> CatalogWasChanged;
 
         /// <summary>
-        /// Конструктор создания таблицы
+        /// Catalog constructor
         /// </summary>
         /// <param name="dbSet"></param>
         public Catalog(DbSet<T> dbSet, CrmContext context)
         {
-            //Инициализируем форму
             InitializeComponent();
-            //В качестве данных для заполнения таблицы используем данные из базы данных
-            //List<T> list = dbSet.ToList();
             this.dbSet = dbSet;
             dataGridView.DataSource = this.dbSet.ToList();
             CrmContext = context ?? new CrmContext();
         }
         /// <summary>
-        /// Метод на нажатие кнопки Добавить, через форму добавляет данные в БД
+        /// Adding data from a form to a database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -88,13 +85,12 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод на нажатие кнопки Изменить, ищет елемент посредством DbSet и через форму изменяет данные в БД
+        /// Changing data from a form in a database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void changeButton_Click(object sender, EventArgs e)
         {
-            //получаем id - первая ячейка первой из выбранных строк
             var id = (int)dataGridView.SelectedRows[0].Cells[0].Value;
 
             if (typeof(T) == typeof(Product))
@@ -148,7 +144,7 @@ namespace CrmUI
         }
 
         /// <summary>
-        /// Метод на нажатие кнопки Удалить, через DbSet ищет элемент в базе данных и удаляет его
+        /// Deleting form data from the database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

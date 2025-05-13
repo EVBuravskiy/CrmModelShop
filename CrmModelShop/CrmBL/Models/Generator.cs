@@ -1,30 +1,33 @@
 ﻿namespace CrmBL.Models
 {
     /// <summary>
-    /// Класс для генерации виртуальных объектов для компьютерного моделирования
+    /// Generator of virtual objects(clients, products, cash registers) for computer modeling
     /// </summary>
     public class Generator
     {
         /// <summary>
-        /// Генератор для создания цен и количества
+        /// Price and quantity generator
         /// </summary>
         private Random rnd = new Random();
 
         /// <summary>
-        /// Коллекция клиентов
+        /// Collection of customers
         /// </summary>
         public List<Customer> Customers { get; set; }
 
         /// <summary>
-        /// Коллекция товаров
+        /// Collection of products
         /// </summary>
         public List<Product> Products { get; set; }
 
         /// <summary>
-        /// Коллекция продавцов
+        /// Collection of sellers
         /// </summary>
         public List<Seller> Sellers { get; set; }
 
+        /// <summary>
+        /// Generator constructor
+        /// </summary>
         public Generator()
         {
             Customers = new List<Customer>();
@@ -33,10 +36,10 @@
         }
 
         /// <summary>
-        /// Метод для создания коллекции заданного количества клиентов
+        /// Create collection of customers
         /// </summary>
         /// <param name="count"></param>
-        /// <returns>Коллекция клиентов</returns>
+        /// <returns>Collection of customers</returns>
         public List<Customer> GetNewCustomers(int count)
         {
             List<Customer> newCustomers = new List<Customer>();
@@ -54,10 +57,10 @@
         }
 
         /// <summary>
-        /// Метод для создания коллекции заданного количества продавцов
+        /// Create collection of sellers
         /// </summary>
         /// <param name="count"></param>
-        /// <returns>Коллекция продавцов</returns>
+        /// <returns>Collection of sellers</returns>
         public List<Seller> GetNewSellers(int count)
         {
             List<Seller> newSellers = new List<Seller>();
@@ -75,10 +78,10 @@
         }
 
         /// <summary>
-        /// Метод для создания коллекции заданного количества товаров
+        /// Create collection of products
         /// </summary>
         /// <param name="count"></param>
-        /// <returns>Коллекция товаров</returns>
+        /// <returns>Collection of products</returns>
         public List<Product> GetNewProducts(int count)
         {
             List<Product> newProducts = new List<Product>();
@@ -98,7 +101,7 @@
         }
 
         /// <summary>
-        /// Метод для создания коллекции рандомных продуктов
+        /// Create random products with random price
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
@@ -115,7 +118,7 @@
         }
 
         /// <summary>
-        /// Приватный метод для создания рандомного текста
+        /// Get random text for customers, sellers and products
         /// </summary>
         /// <returns>Рандомный текст</returns>
         private string GetRandomText()

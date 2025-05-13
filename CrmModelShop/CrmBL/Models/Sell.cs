@@ -1,36 +1,33 @@
 ﻿namespace CrmBL.Models
 {
     /// <summary>
-    /// Таблица связывающая заказ и продукты
+    /// Sell ​​intermediate entity for orders and products
     /// </summary>
     public class Sell
     {
         /// <summary>
-        /// Идентификатор продажи
+        /// Sell ID
         /// </summary>
         public int SellId { get; set; }
 
         /// <summary>
-        /// Идентификатор заказа
+        /// Order ID
         /// </summary>
         public int OrderId { get; set; }
 
         /// <summary>
-        /// Свойство связывающее с таблицей заказа
+        /// Entity Order
         /// </summary>
         public virtual Order Order { get; set; }
 
         /// <summary>
-        /// Идентификатор продукта
+        /// Product ID
         /// </summary>
         public int ProductId { get; set; }
 
         /// <summary>
-        /// Свойство связывающее с таблицей продукта
+        /// Entity Product
         /// </summary>
         public Product Product { get; set; }
-        //<connectionStrings>
-        //<add name="DBContection" connectionString="Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=db; Integrated Security=True" providerName="System.Data.SqlClient"/>
-        //</connectionStrings>
     }
 }

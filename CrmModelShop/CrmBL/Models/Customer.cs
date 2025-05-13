@@ -1,22 +1,22 @@
 ﻿namespace CrmBL.Models
 {
     /// <summary>
-    /// Клиент - покупатель
+    /// Entity Customer
     /// </summary>
     public class Customer
     {
         /// <summary>
-        /// Идентификатор клиента для базы данных
+        /// Customer ID
         /// </summary>
         public int CustomerId { get; set; }
 
         /// <summary>
-        /// Имя клиента
+        /// Customer name
         /// </summary>
         public string CustomerName { get; set; }
 
         /// <summary>
-        /// Свойство - коллекция связанное с заказами
+        /// Collection of orders
         /// </summary>
         public virtual ICollection<Order> Orders { get; set; }    
 
