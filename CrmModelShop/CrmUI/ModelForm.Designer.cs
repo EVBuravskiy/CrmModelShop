@@ -210,6 +210,7 @@
             this.Name = "ModelForm";
             this.Text = "ModelForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ModelForm_FormClosing);
+            this.Load += new System.EventHandler(this.ModelForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.CashBoxCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ProductsCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CustomersCount)).EndInit();

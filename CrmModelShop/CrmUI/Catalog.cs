@@ -22,7 +22,7 @@ namespace CrmUI
         /// <summary>
         /// Переменная контекста для работы с базой данных
         /// </summary>
-        CrmContext crmContext;
+        CrmContext CrmContext { get; set; }
 
         /// <summary>
         /// Переменная таблицы базы данной для нахождения элемента
@@ -30,10 +30,15 @@ namespace CrmUI
         DbSet<T> dbSet;
 
         /// <summary>
+        /// Событие, возвращающее заказ
+        /// </summary>
+        public event EventHandler<bool> CatalogWasChanged;
+
+        /// <summary>
         /// Конструктор создания таблицы
         /// </summary>
         /// <param name="dbSet"></param>
-        public Catalog(DbSet<T> dbSet)
+        public Catalog(DbSet<T> dbSet, CrmContext context)
         {
             //Инициализируем форму
             InitializeComponent();
@@ -41,7 +46,7 @@ namespace CrmUI
             //List<T> list = dbSet.ToList();
             this.dbSet = dbSet;
             dataGridView.DataSource = this.dbSet.ToList();
-            crmContext = new CrmContext();
+            CrmContext = context ?? new CrmContext();
         }
         /// <summary>
         /// Метод на нажатие кнопки Добавить, через форму добавляет данные в БД
@@ -55,8 +60,9 @@ namespace CrmUI
                 ProductForm productForm = new ProductForm();
                 if (productForm.ShowDialog() == DialogResult.OK)
                 {
-                    crmContext.Products.Add(productForm.Product);
-                    crmContext.SaveChanges();
+                    CrmContext.Products.Add(productForm.Product);
+                    CrmContext.SaveChanges();
+                    CatalogWasChanged?.Invoke(this, true);
                 }
             }
             else if (typeof(T) == typeof(Customer))
@@ -64,8 +70,8 @@ namespace CrmUI
                 CustomerForm customerForm = new CustomerForm();
                 if (customerForm.ShowDialog() == DialogResult.OK)
                 {
-                    crmContext.Customers.Add(customerForm.Customer);
-                    crmContext.SaveChanges();
+                    CrmContext.Customers.Add(customerForm.Customer);
+                    CrmContext.SaveChanges();
                 }
             }
             else if (typeof(T) == typeof(Seller))
@@ -73,10 +79,11 @@ namespace CrmUI
                 SellerForm sellerForm = new SellerForm();
                 if (sellerForm.ShowDialog() == DialogResult.OK)
                 {
-                    crmContext.Sellers.Add(sellerForm.Seller);
-                    crmContext.SaveChanges();
+                    CrmContext.Sellers.Add(sellerForm.Seller);
+                    CrmContext.SaveChanges();
                 }
             }
+            dataGridView.DataSource = this.dbSet.ToList();
             dataGridView.Update();
         }
 
@@ -100,8 +107,9 @@ namespace CrmUI
                     if (productForm?.ShowDialog() == DialogResult.OK)
                     {
                         productForm.Product.ProductId = id;
-                        crmContext.Products.Update(productForm.Product);
-                        crmContext.SaveChanges();
+                        CrmContext.Products.Update(productForm.Product);
+                        CrmContext.SaveChanges();
+                        CatalogWasChanged?.Invoke(this, true);
                     }
                 }
             }
@@ -115,8 +123,8 @@ namespace CrmUI
                     if (customerForm?.ShowDialog() == DialogResult.OK)
                     {
                         customerForm.Customer.CustomerId = id;
-                        crmContext.Customers.Update(customerForm.Customer);
-                        crmContext.SaveChanges();
+                        CrmContext.Customers.Update(customerForm.Customer);
+                        CrmContext.SaveChanges();
                     }
                 }
             }
@@ -130,11 +138,12 @@ namespace CrmUI
                     if (sellerForm?.ShowDialog() == DialogResult.OK)
                     {
                         sellerForm.Seller.SellerId = id;
-                        crmContext.Sellers.Update(sellerForm.Seller);
-                        crmContext.SaveChanges();
+                        CrmContext.Sellers.Update(sellerForm.Seller);
+                        CrmContext.SaveChanges();
                     }
                 }
             }
+            dataGridView.DataSource = this.dbSet.ToList();
             dataGridView.Update();
         }
 
@@ -152,8 +161,9 @@ namespace CrmUI
                 Product product = dbSet.Find(id) as Product;
                 if (product != null)
                 {
-                    crmContext.Products.Remove(product);
-                    crmContext.SaveChanges();
+                    CrmContext.Products.Remove(product);
+                    CrmContext.SaveChanges();
+                    CatalogWasChanged?.Invoke(this, true);
                 }
             }
 
@@ -162,8 +172,8 @@ namespace CrmUI
                 Customer customer = dbSet.Find(id) as Customer;
                 if (customer != null)
                 {
-                    crmContext.Customers.Remove(customer);
-                    crmContext.SaveChanges();
+                    CrmContext.Customers.Remove(customer);
+                    CrmContext.SaveChanges();
                 }
             }
             else if (typeof(T) == typeof(Seller))
@@ -171,10 +181,11 @@ namespace CrmUI
                 Seller seller = dbSet.Find(id) as Seller;
                 if (seller != null)
                 {
-                    crmContext.Sellers.Remove(seller);
-                    crmContext.SaveChanges();
+                    CrmContext.Sellers.Remove(seller);
+                    CrmContext.SaveChanges();
                 }
             }
+            dataGridView.DataSource = this.dbSet.ToList();
             dataGridView.Update();
         }
     }

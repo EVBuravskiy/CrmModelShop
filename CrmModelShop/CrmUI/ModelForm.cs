@@ -10,12 +10,6 @@ namespace CrmUI
         public ModelForm()
         {
             InitializeComponent();
-            //Инициализируем поля компьютерной модели начальными значениями из формы
-            computerModel.CashBoxCount = Convert.ToInt32(CashBoxCount.Value);
-            computerModel.CustomersProductCount = Convert.ToInt32(ProductsCount.Value);
-            computerModel.CustomersCount = Convert.ToInt32(CustomersCount.Value);
-            computerModel.CustomersSpeed = Convert.ToInt32(CustomerSpeed.Value);
-            computerModel.CashBoxSpeed = Convert.ToInt32(CashBoxSpeed.Value);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -25,7 +19,8 @@ namespace CrmUI
 
             //Запускаем компьютерную модель
             computerModel.Start();
-            button1.Hide();
+            button1.Enabled = false;
+            CashBoxCount.Enabled = false;
 
             //Исходя из количества касс в компьютерной модели 
             for (int i = 0; i < computerModel.CashBoxCount; i++)
@@ -60,11 +55,11 @@ namespace CrmUI
         /// <param name="e"></param>
         private void ModelForm_Load(object sender, EventArgs e)
         {
-            CashBoxCount.Value = computerModel.CashBoxCount;
-            ProductsCount.Value = computerModel.CustomersProductCount;
-            CustomersCount.Value = computerModel.CustomersCount;
-            CustomerSpeed.Value = computerModel.CustomersSpeed;
-            CashBoxSpeed.Value = computerModel.CashBoxSpeed;
+            computerModel.CashBoxCount = Convert.ToInt32(CashBoxCount.Value);
+            computerModel.CustomersProductCount = Convert.ToInt32(ProductsCount.Value);
+            computerModel.CustomersCount = Convert.ToInt32(CustomersCount.Value);
+            computerModel.CustomersSpeed = Convert.ToInt32(CustomerSpeed.Value);
+            computerModel.CashBoxSpeed = Convert.ToInt32(CashBoxSpeed.Value);
         }
         
         /// <summary>

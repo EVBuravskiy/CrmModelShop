@@ -28,6 +28,20 @@ namespace CrmUI
         /// </summary>
         Cart CustomerCart { get; set; }
 
+        /// <summary>
+        /// Касса
+        /// </summary>
+        CashBox CashBox { get; set; }
+
+        /// <summary>
+        /// Продавец
+        /// </summary>
+        Seller Seller { get; set; }
+
+        /// <summary>
+        /// Свойство для инициализации списка продуктов из базы данных
+        /// </summary>
+        List<Product> ListOfProducts { get; set; }
 
         /// <summary>
         /// Конструктор для основной формы
@@ -37,11 +51,7 @@ namespace CrmUI
             InitializeComponent();
             //инициализация переменной контекста
             crmContext = new CrmContext();
-
-            Customer = new Customer();
-
-            CustomerCart = new Cart(Customer);
-
+            //ListOfProducts = crmContext.Products.ToList();
         }
 
         /// <summary>
@@ -51,8 +61,9 @@ namespace CrmUI
         /// <param name="e"></param>
         private void ProductToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Catalog<Product> catalogProduct = new Catalog<Product>(crmContext.Products);
+            Catalog<Product> catalogProduct = new Catalog<Product>(crmContext.Products, crmContext);
             catalogProduct.Show();
+            catalogProduct.CatalogWasChanged += Change_Main;
         }
 
         /// <summary>
@@ -62,7 +73,7 @@ namespace CrmUI
         /// <param name="e"></param>
         private void CustomerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Catalog<Customer> catalogCustomer = new Catalog<Customer>(crmContext.Customers);
+            Catalog<Customer> catalogCustomer = new Catalog<Customer>(crmContext.Customers, crmContext);
             catalogCustomer.Show();
         }
 
@@ -73,7 +84,7 @@ namespace CrmUI
         /// <param name="e"></param>
         private void SellerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Catalog<Seller> catalogSeller = new Catalog<Seller>(crmContext.Sellers);
+            Catalog<Seller> catalogSeller = new Catalog<Seller>(crmContext.Sellers, crmContext);
             catalogSeller.Show();
         }
 
@@ -84,7 +95,7 @@ namespace CrmUI
         /// <param name="e"></param>
         private void OrderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Catalog<Order> catalogOrder = new Catalog<Order>(crmContext.Orders);
+            Catalog<Order> catalogOrder = new Catalog<Order>(crmContext.Orders, crmContext);
             catalogOrder.Show();
         }
 
@@ -101,6 +112,7 @@ namespace CrmUI
                 crmContext.Products.Add(productForm.Product);
                 crmContext.SaveChanges();
             }
+            Change_Main(sender, true);
         }
 
         /// <summary>
@@ -155,7 +167,7 @@ namespace CrmUI
             {
                 listBoxProducts.Invoke((Action)delegate
                 {
-                    listBoxProducts.Items.AddRange(crmContext.Products.ToArray());
+                    ListOfProducts = crmContext.Products.ToList();
                 });
                 listBoxCart.Invoke((Action)delegate
                 {
@@ -171,8 +183,15 @@ namespace CrmUI
         /// <param name="e"></param>
         private void listBoxProducts_DoubleClick(object sender, EventArgs e)
         {
-            if(listBoxProducts.SelectedItem is Product product)
+            if(Customer == null)
             {
+                MessageBox.Show("Авторизуйтесь, пожалуйста!", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (listBoxProducts.SelectedItem is Product product)
+            {
+                Product tempProduct = ListOfProducts.FirstOrDefault(pr => pr.ProductId == product.ProductId);
+                tempProduct.ProductCount--;
                 CustomerCart.AddToCart(product);
                 listBoxCart.Items.Add(product);
                 UpdateLists();
@@ -184,9 +203,93 @@ namespace CrmUI
         /// </summary>
         private void UpdateLists()
         {
-            listBoxCart.Items.Clear();
-            listBoxCart.Items.AddRange(CustomerCart.GetAllFromCart().ToArray());
-            label1.Text = $"Итого: {CustomerCart.TotalCost} рублей";
+            listBoxProducts.Items.Clear();
+            listBoxProducts.Items.AddRange(ListOfProducts.Where(p => p.ProductCount > 0).ToArray());
+            if (Customer != null)
+            {
+                listBoxCart.Items.Clear();
+                listBoxCart.Items.AddRange(CustomerCart.GetAllFromCart().ToArray());
+                label1.Text = $"Итого: {CustomerCart.TotalCost} рублей";
+            }
         }
+
+        /// <summary>
+        /// Метод при нажатии на кнопку Авторизация
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void linkLabelAuthorisation_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Authorization authorizationForm = new Authorization();
+            authorizationForm.ShowDialog();
+            if (authorizationForm.DialogResult == DialogResult.OK)
+            {
+                Customer tempCustomer = crmContext.Customers.SingleOrDefault(c => c.CustomerName.Equals(authorizationForm.Customer.CustomerName));
+                if (tempCustomer != null)
+                {
+                    Customer = tempCustomer;
+                }
+                else
+                {
+                    crmContext.Customers.Add(authorizationForm.Customer);
+                    crmContext.SaveChanges();
+                    Customer = authorizationForm.Customer;
+                }
+                linkLabelAuthirisation.Text = $"Добро пожаловать, {Customer.CustomerName}!";
+                linkLabelAuthirisation.Enabled = false;
+                CustomerCart = new Cart(Customer);
+            }
+        }
+
+        /// <summary>
+        /// Метод при нажатии на кнопку Оплатить
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonPay_Click(object sender, EventArgs e)
+        {
+            if(Customer != null)
+            {
+                Seller seller = crmContext.Sellers.FirstOrDefault();
+                decimal sum = 0;
+                if (seller != null && CustomerCart != null)
+                {
+                    CashBox = new CashBox(1, seller, crmContext);
+                    CashBox.IsModel = false;
+                    if (CustomerCart.Products.Count > 0)
+                    {
+                        CashBox.Enqueue(CustomerCart);
+                        sum = CashBox.Dequeue();
+                    }
+                    CashBox.IsModel = true;
+                }
+                listBoxCart.Items.Clear();
+                label1.Text = $"Итого: ";
+                if (sum > 0)
+                {
+                    MessageBox.Show($"Поздравляю, {Customer.CustomerName}! Вами совершена покупка на сумму {sum}", "Покупка выполнена", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    CustomerCart = new Cart(Customer);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Авторизуйтесь, пожалуйста!", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        /// <summary>
+        /// Приватный метод реализующий появление события
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="order"></param>
+        private void Change_Main(object sender, bool flag)
+        {
+            if(flag)
+            {
+                ListOfProducts = crmContext.Products.ToList();
+                UpdateLists();
+            }
+        }
+
     }
 }

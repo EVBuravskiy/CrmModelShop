@@ -64,13 +64,13 @@ namespace CrmBL.Models
         /// <param name="cashBoxId"></param>
         /// <param name="seller"></param>
         
-        public CashBox(int cashBoxId, Seller seller) 
+        public CashBox(int cashBoxId, Seller seller, CrmContext crmContext = null) 
         { 
             CashBoxId = cashBoxId;
             Seller = seller;
             CartsQueue = new Queue<Cart>();
             ExitCustomer = 0;
-            CrmContext = new CrmContext();
+            CrmContext = crmContext ?? new CrmContext();
             IsModel = true;
             MaxQueueLenght = 10;
         }
@@ -114,6 +114,7 @@ namespace CrmBL.Models
                     CustomerId = cart.Customer.CustomerId,
                     Customer = cart.Customer,
                     CreateOrderDateTime = DateTime.Now,
+                    OrderPrice = cart.TotalCost,
                 };
                 if(!IsModel)
                 {
@@ -144,8 +145,6 @@ namespace CrmBL.Models
                         {
                             CrmContext.Sells.Add(sell);
                         }
-
-                        product.ProductCount -= 1;
 
                         sum += product.ProductPrice;
                     }

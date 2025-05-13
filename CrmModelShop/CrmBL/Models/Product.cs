@@ -32,7 +32,7 @@
 
         public override string ToString()
         {
-            return $"{ProductName}\t\t- {ProductPrice} рублей";
+            return $"{ProductName}\t\t{ProductPrice} руб.    \tОстаток: {ProductCount}";
         }
 
         /// <summary>
